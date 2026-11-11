@@ -109,8 +109,8 @@ async function main() {
     case 'tabs': return out(await call('tabs'));
     case 'tab': return out(await call('tab', { index: Number(pos[0]) }));
     case 'close': return out(await call('closeref', { index: Number(pos[0]) }));
-    case 'new': return out(await call('newtab', { url: pos[0], waitComplete: bool(flags['wait-complete']), ...common }));
-    case 'open': return out(await call('open', { url: pos[0], newTab: !!flags.new, waitComplete: bool(flags['wait-complete']), ...common }));
+    case 'new': return out(await call('newtab', { url: pos[0], waitComplete: bool(flags['wait-complete']), background: bool(flags.background), ...common }));
+    case 'open': return out(await call('open', { url: pos[0], newTab: !!flags.new, waitComplete: bool(flags['wait-complete']), background: bool(flags.background), ...common }));
     case 'stop': return out(await call('stop', common));
     case 'back': return out(await call('back', common));
     case 'forward': return out(await call('forward', common));

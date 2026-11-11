@@ -23,7 +23,7 @@ zbr status        # running=true 且 tabs 有内容 = 可以干活
 ## 命令
 
 ```bash
-zbr new <url> [--wait-complete]     # 新标签打开，返回 tabId（记住它）
+zbr new <url> [--wait-complete] [--background]  # 新标签；--background 不抢焦点
 zbr open <url> [--new]              # 当前标签跳转，默认只等 DOMContentLoaded
 zbr stop [--tab-id=id]              # 中断卡住的加载（导航到 about:blank）
 zbr text [--max=6000] [--wait-stable] [--no-dedupe]
@@ -49,6 +49,7 @@ zbr click "登录" --tab-id=5da78121   # 之后一直用它，序号漂移也不
 zbr shot /tmp/page.png --tab-id=5da78121
 ```
 
+- **调研不要抢焦点**：查资料用 `zbr new --background`，再用 `--tab-id` 操作；不要激活或切换用户正在看的标签。
 - **不要依赖"当前活动标签"**：截图、取文、点击可能落到别的页。
 - `new` 一定返回 `tabId`；多标签工作流里把它存进变量。
 - `shot` 不指定目标时只截"最近操作的标签"，不是"你以为的那个"。

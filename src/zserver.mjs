@@ -447,10 +447,10 @@ const actions = {
     return summary(id);
   },
 
-  async open({ url, newTab, waitComplete }) {
+  async open({ url, newTab, waitComplete, background }) {
     if (!url) throw new Error('missing url');
     if (newTab) {
-      const { context: id } = await rpc('browsingContext.create', { type: 'tab' }).catch(async () => {
+      const { context: id } = await rpc('browsingContext.create', { type: 'tab', background: !!background }).catch(async () => {
         const cur = await ctx();
         await evalIn(cur, `window.open(${JSON.stringify(url)}, '_blank')`);
         await sleep(1200);
@@ -458,8 +458,8 @@ const actions = {
         return { context: list[list.length - 1].id };
       });
       await navigate(id, url, { waitComplete });
-      await rpc('browsingContext.activate', { context: id }).catch(() => {});
-      activeTabId = id;
+      if (!background) await rpc('browsingContext.activate', { context: id }).catch(() => {});
+      activeTabId = background ? activeTabId : id;
       return summary(id);
     }
     const id = await ctx();
@@ -467,11 +467,11 @@ const actions = {
     return summary(id);
   },
 
-  async newtab({ url, waitComplete }) {
-    const { context: id } = await rpc('browsingContext.create', { type: 'tab' });
+  async newtab({ url, waitComplete, background }) {
+    const { context: id } = await rpc('browsingContext.create', { type: 'tab', background: !!background });
     if (url) await navigate(id, url, { waitComplete });
-    await rpc('browsingContext.activate', { context: id }).catch(() => {});
-    activeTabId = id;
+    if (!background) await rpc('browsingContext.activate', { context: id }).catch(() => {});
+    activeTabId = background ? activeTabId : id;
     return summary(id);
   },
 
